@@ -1,9 +1,9 @@
 # Postgresql
--- Database: day1
+-- Database: Day 1
 
--- DROP DATABASE IF EXISTS day1;
+-- DROP DATABASE IF EXISTS "Day 1";
 
-CREATE DATABASE day1
+CREATE DATABASE "Day 1"
     WITH
     OWNER = postgres
     ENCODING = 'UTF8'
@@ -14,133 +14,46 @@ CREATE DATABASE day1
     CONNECTION LIMIT = -1
     IS_TEMPLATE = False;
 
+	create table country (
+	Id integer primary key,
+	CountryName varchar(255)
+	);
+	insert into country (Id,CountryName)values(101,'India'),(102,'Australia'),(103,'USA');
+	select * from country
 
-CREATE TABLE customer (
-   customer_id serial PRIMARY KEY,
-   first_name character varying(100) NOT NULL,
-   last_name character varying(100) NOT NULL,
-   email character varying(255) UNIQUE NOT NULL,
-   created_date timestamp with time zone NOT NULL DEFAULT now(),
-   updated_date timestamp with time zone
-);
+	Alter table country rename to abc
 
-DROP TABLE IF EXISTS customer;
+	create table city(
+	Id integer primary key,
+	CountryId integer,
+	CityName varchar(100),
+	foreign key (CountryId) references abc (Id)
+	);
 
-ALTER TABLE customer ADD COLUMN active boolean;
+	insert into city (Id,CountryId,CityName)values(104,101,'Gandhinagar'),(106,102,'Surat'),(108,103,'Div');
 
-ALTER TABLE customer DROP COLUMN active;
+	select * from city
 
-select * from customer;
-
-ALTER TABLE customer RENAME COLUMN email TO email_address;
-
-SELECT * from customer
-
-ALTER TABLE customer RENAME TO Country;
-
-ALTER TABLE Country DROP COLUMN first_name;
-ALTER TABLE Country DROP COLUMN last_name;
-ALTER TABLE Country DROP COLUMN created_date;
-ALTER TABLE Country DROP COLUMN email_address;
-ALTER TABLE Country DROP COLUMN updated_date;
-
-
-DROP TABLE IF EXISTS Country;
-
-CREATE TABLE Country (
-    Id INTEGER PRIMARY KEY,
-    CountryName VARCHAR(255)
-);
-
-INSERT INTO Country VALUES (1, 'India'), (2, 'USA');
-SELECT * from Country
-
-CREATE TABLE City (
-    Id INTEGER PRIMARY KEY,
-    CountryId INTEGER,
-    CityName VARCHAR(255),
-    FOREIGN KEY (CountryId) REFERENCES Country(Id)
-);
-
-INSERT INTO City VALUES (1, 1, 'Mumbai'), (2, 2, 'New York');
-SELECT * from City
-
-CREATE TABLE MissionTheme (
+	CREATE TABLE MissionTheme (
     Id INTEGER PRIMARY KEY,
     ThemeName VARCHAR(255),
     Status VARCHAR(255)
-);
+	);
 
-INSERT INTO MissionTheme VALUES (1, 'Environment', 'Active');
-select * from MissionTheme
+	INSERT INTO MissionTheme VALUES (1, 'Hashh', 'Dcet');
+	select * from MissionTheme
 
-CREATE TABLE MissionSkill (
+	CREATE TABLE MissionSkill (
     Id INTEGER PRIMARY KEY,
     SkillName VARCHAR(255),
     Status VARCHAR(255)
-);
+	);
 
-INSERT INTO MissionSkill VALUES (1, 'Teaching', 'Active');
-select * from MissionSkill
-
-CREATE TABLE "User" (
-    Id INTEGER PRIMARY KEY,
-    FirstName VARCHAR(255),
-    LastName VARCHAR(255),
-    PhoneNumber VARCHAR(255),
-    EmailAddress VARCHAR(255),
-    UserType VARCHAR(255),
-    Password VARCHAR(255)
-);
-
-INSERT INTO "User" VALUES (1, 'John', 'Doe', '1234567890', 'john@example.com', 'Volunteer', 'securepass');
-select * from "User"
-
-CREATE TABLE UserDetail (
-    Id INTEGER PRIMARY KEY,
-    UserId INTEGER,
-    Name VARCHAR(255),
-    Surname VARCHAR(255),
-    EmployeeId VARCHAR(255),
-    Manager VARCHAR(255),
-    Title VARCHAR(255),
-    Department VARCHAR(255),
-    MyProfile VARCHAR(255),
-    WhyIVolunteer VARCHAR(255),
-    CountryId INTEGER,
-    CityId INTEGER,
-    Avilability VARCHAR(255),
-    LinkdInUrl VARCHAR(255),
-    MySkills VARCHAR(255),
-    UserImage VARCHAR(255),
-    Status BOOLEAN,
-    FOREIGN KEY (UserId) REFERENCES "User"(Id),
-    FOREIGN KEY (CountryId) REFERENCES Country(Id),
-    FOREIGN KEY (CityId) REFERENCES City(Id)
-);
-
-INSERT INTO UserDetail (
-    Id, UserId, Name, Surname, EmployeeId, Manager, Title, Department,
-    MyProfile, WhyIVolunteer, CountryId, CityId, Avilability, LinkdInUrl,
-    MySkills, UserImage, Status
-) VALUES (
-    1, 1, 'John', 'Doe', 'E123', 'Jane', 'Developer', 'IT', 'Profile info',
-    'Help society', 1, 1, 'Weekends', 'linkedin.com/in/john', 'Teaching', 'img.png', TRUE
-);
-select * from UserDetail
-
-CREATE TABLE UserSkills (
-    Id INTEGER PRIMARY KEY,
-    Skill VARCHAR(255),
-    UserId INTEGER,
-    FOREIGN KEY (UserId) REFERENCES "User"(Id)
-);
-
-INSERT INTO UserSkills VALUES (1, 'Teaching', 1);
-select * from UserSkills
+	INSERT INTO MissionSkill VALUES (2, 'Ananya', 'Taylor');
+	select * from MissionSkill
 
 
-CREATE TABLE Missions (
+	CREATE TABLE Missions (
     Id INTEGER PRIMARY KEY,
     MissionTitle VARCHAR(255),
     MissionDescription VARCHAR(255),
@@ -159,65 +72,71 @@ CREATE TABLE Missions (
     MissionDocuments VARCHAR(255),
     MissionAvilability VARCHAR(255),
     MissionVideoUrl VARCHAR(255),
-    FOREIGN KEY (CountryId) REFERENCES Country(Id),
+    FOREIGN KEY (CountryId) REFERENCES abc(Id),
     FOREIGN KEY (CityId) REFERENCES City(Id),
     FOREIGN KEY (MissionThemeId) REFERENCES MissionTheme(Id),
     FOREIGN KEY (MissionSkillId) REFERENCES MissionSkill(Id)
-);
+	);
 
-INSERT INTO Missions (
+	INSERT INTO Missions (
     Id, MissionTitle, MissionDescription, MissionOrganisationName,
     MissionOrganisationDetail, CountryId, CityId, StartDate, EndDate,
     MissionType, TotalSheets, RegistrationDeadLine, MissionThemeId,
     MissionSkillId, MissionImages, MissionDocuments, MissionAvilability,
-    MissionVideoUrl
-) VALUES (
-    1, 'Beach Cleanup', 'Clean the beach with team', 'Green Org', 'NGO for environment',
-    1, 1, '2025-06-01', '2025-06-30', 'Time', 100, '2025-05-31', 1, 1,
-    'img1.jpg', 'doc1.pdf', 'Weekends', 'https://video.com/cleanbeach'
-);
-select * from Missions
-
-CREATE TABLE MissionApplication (
+    MissionVideoUrl) VALUES (100, 'Washing clothes', 'Wash clothes with soap', 'Style clothes', 'New trend of clothes', 101, 104, '2025-05-25', '2025-05-28', 'Time', 101, '2025-06-03', 1, 2,'img1.jpg', 'doc1.pdf', 'Weekends', 'https://video.com/washclothes'
+	);
+	select * from Missions
+	
+	CREATE TABLE "User" (
     Id INTEGER PRIMARY KEY,
-    MissionId INTEGER,
+    FirstName VARCHAR(255),
+    LastName VARCHAR(255),
+    PhoneNumber VARCHAR(255),
+    EmailAddress VARCHAR(255),
+    UserType VARCHAR(255),
+    Password VARCHAR(255)
+	);
+
+	INSERT INTO "User" VALUES (1, 'Raj', 'Modi', '1234567890', 'raj@example.com', 'Student', 'raj123'); 
+	select * from "User"
+
+	CREATE TABLE UserDetail (
+    Id INTEGER PRIMARY KEY,
     UserId INTEGER,
-    AppliedDate TIMESTAMP,
+    Name VARCHAR(255),
+    Surname VARCHAR(255),
+    EmployeeId VARCHAR(255),
+    Manager VARCHAR(255),
+    Title VARCHAR(255),
+    Department VARCHAR(255),
+    MyProfile VARCHAR(255),
+    WhyIVolunteer VARCHAR(255),
+    CountryId INTEGER,
+    CityId INTEGER,
+    Avilability VARCHAR(255),
+    LinkdInUrl VARCHAR(255),
+    MySkills VARCHAR(255),
+    UserImage VARCHAR(255),
     Status BOOLEAN,
-    Sheet INTEGER,
-    FOREIGN KEY (MissionId) REFERENCES Missions(Id),
-    FOREIGN KEY (UserId) REFERENCES "User"(Id)
-);
+    FOREIGN KEY (UserId) REFERENCES "User"(Id),
+    FOREIGN KEY (CountryId) REFERENCES abc(Id),
+    FOREIGN KEY (CityId) REFERENCES City(Id)
+	);
 
-INSERT INTO MissionApplication VALUES (
-    1, 1, 1, '2025-05-20 10:00:00', TRUE, 1
-);
-select * from MissionApplication
+	INSERT INTO UserDetail (
+    Id, UserId, Name, Surname, EmployeeId, Manager, Title, Department,
+    MyProfile, WhyIVolunteer, CountryId, CityId, Avilability, LinkdInUrl,
+    MySkills, UserImage, Status) VALUES (	1, 1, 'Raj', 'Modi', 'Emp123', 'Developer', 'Developer2', 'IT', 'Profile info',
+    'Help society', 101, 104, 'Weekends', 'linkedin.com/in/Raj', 'Annoying', 'img.png', TRUE
+	);
+	select * from UserDetail
 
-CREATE OR REPLACE VIEW FullUserProfile AS
-SELECT 
-    u.Id AS UserId,
-    u.FirstName,
-    u.LastName,
-    u.PhoneNumber,
-    u.EmailAddress,
-    u.UserType,
-    ud.Title,
-    ud.Department,
-    ud.Manager,
-    ud.EmployeeId,
-    ud.MyProfile,
-    ud.WhyIVolunteer,
-    ud.Avilability,
-    ud.LinkdInUrl,
-    ud.MySkills,
-    ud.UserImage,
-    ud.Status AS ProfileStatus,
-    c.CountryName,
-    ci.CityName
-FROM "User" u
-LEFT JOIN UserDetail ud ON u.Id = ud.UserId
-LEFT JOIN Country c ON ud.CountryId = c.Id
-LEFT JOIN City ci ON ud.CityId = ci.Id;
 
-SELECT * FROM FullUserProfile;
+
+
+
+    
+    
+
+   
+
