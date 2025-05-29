@@ -131,6 +131,60 @@ CREATE DATABASE "Day 1"
 	);
 	select * from UserDetail
 
+CREATE TABLE UserSkills (
+    Id INTEGER PRIMARY KEY,
+    Skill VARCHAR(255),
+    UserId INTEGER,
+    FOREIGN KEY (UserId) REFERENCES "User"(Id)
+);
+
+INSERT INTO UserSkills VALUES (1, 'Teaching', 1);
+select * from UserSkills
+
+CREATE TABLE MissionApplication (
+    Id INTEGER PRIMARY KEY,
+    MissionId INTEGER,
+    UserId INTEGER,
+    AppliedDate TIMESTAMP,
+    Status BOOLEAN,
+    Sheet INTEGER,
+    FOREIGN KEY (MissionId) REFERENCES Missions(Id),
+    FOREIGN KEY (UserId) REFERENCES "User"(Id)
+);
+
+INSERT INTO MissionApplication VALUES (
+    101, 104, 107, '2025-06-01 11:03:05', TRUE, 1
+);
+select * from MissionApplication
+
+CREATE OR REPLACE VIEW FullUserProfile AS
+SELECT 
+    u.Id AS UserId,
+    u.FirstName,
+    u.LastName,
+    u.PhoneNumber,
+    u.EmailAddress,
+    u.UserType,
+    ud.Title,
+    ud.Department,
+    ud.Manager,
+    ud.EmployeeId,
+    ud.MyProfile,
+    ud.WhyIVolunteer,
+    ud.Avilability,
+    ud.LinkdInUrl,
+    ud.MySkills,
+    ud.UserImage,
+    ud.Status AS ProfileStatus,
+    c.CountryName,
+    ci.CityName
+FROM "User" u
+LEFT JOIN UserDetail ud ON u.Id = ud.UserId
+LEFT JOIN Country c ON ud.CountryId = c.Id
+LEFT JOIN City ci ON ud.CityId = ci.Id;
+
+SELECT * FROM FullUserProfile;
+
 
 
 
